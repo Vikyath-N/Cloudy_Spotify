@@ -6,15 +6,15 @@ import requests
 app = Flask(__name__)
 
 # Spotify API credentials (Client ID and Client Secret)
-SPOTIPY_CLIENT_ID = 'YOUR_SPOTIPY_CLIENT_ID'
-SPOTIPY_CLIENT_SECRET = 'YOUR_SPOTIPY_CLIENT_SECRET'
+SPOTIPY_CLIENT_ID = '32fa381477cc42a98058658debebe637'
+SPOTIPY_CLIENT_SECRET = '743df42b17c34f7887d94349c147ca60'
 
 # Initialize the Spotify client
 client_credentials_manager = SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET)
 spotify = Spotify(client_credentials_manager=client_credentials_manager)
 
 # Weather API key
-WEATHER_API_KEY = 'YOUR_WEATHER_API_KEY'
+WEATHER_API_KEY = 'a19185f10075ce7c80e43d04557895e8'
 
 @app.route('/get_weather', methods=['POST'])
 def get_weather():
