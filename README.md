@@ -13,7 +13,7 @@ A web app that combines real-time weather data with Spotify's music recommendati
 
 - **requirements.txt:** A text file that lists the Python packages and dependencies required to run the Python backend (app.py). You can use this file to install the necessary packages using pip.
 
-- **config.py:** A Python module that stores sensitive information such as API keys and secrets. It is used to securely store your Spotify API credentials and other configuration values. Ensure that this file is included in your .gitignore to keep your credentials safe and not publicly visible in your version control system.
+- **config.py:** (Need to make your own!)A Python module that stores sensitive information such as API keys and secrets. It is used to securely store your Spotify API credentials and other configuration values. Ensure that this file is included in your .gitignore to keep your credentials safe and not publicly visible in your version control system.
 
 ## Usage
 
