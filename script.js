@@ -2,10 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const zipCodeInput = document.getElementById("zip-code");
     const getWeatherButton = document.getElementById("get-weather");
   
-    // Spotify API credentials (Client ID and Redirect URI)
-    const CLIENT_ID = "32fa381477cc42a98058658debebe637";
-    const REDIRECT_URI = "http://localhost:3000/callback";
-  
     // Event listener for the "Get Weather" button
     getWeatherButton.addEventListener("click", () => {
       const zipCode = zipCodeInput.value;
@@ -31,12 +27,23 @@ document.addEventListener("DOMContentLoaded", () => {
           }
   
           // Step 3: Redirect the user to Spotify for authentication
-          const spotifyAuthURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=user-library-read`;
-          window.location.href = spotifyAuthURL;
+          redirectToSpotifyAuthentication(playlistName);
         })
         .catch((error) => {
           console.error("Error fetching weather data:", error);
         });
     });
+  
+    // Function to redirect to Spotify for authentication
+    function redirectToSpotifyAuthentication(playlistName) {
+      const CLIENT_ID = "YOUR_SPOTIFY_CLIENT_ID";
+      const REDIRECT_URI = "http://localhost:3000/callback";
+      
+      // Construct the Spotify authorization URL
+      const spotifyAuthURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=user-library-read`;
+      
+      // Redirect the user to Spotify for authentication
+      window.location.href = spotifyAuthURL;
+    }
   });
   
