@@ -2,12 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const zipCodeInput = document.getElementById("zip-code");
     const getWeatherButton = document.getElementById("get-weather");
   
+    // Spotify API credentials (Client ID and Redirect URI)
+    const CLIENT_ID = "32fa381477cc42a98058658debebe637";
+    const REDIRECT_URI = "http://localhost:3000/callback";
+  
     // Event listener for the "Get Weather" button
     getWeatherButton.addEventListener("click", () => {
       const zipCode = zipCodeInput.value;
   
-      // Step 1: Fetch weather data based on the user's zip code (you need to replace 'YOUR_WEATHER_API_KEY' with your actual API key)
-      fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=YOUR_WEATHER_API_KEY`)
+      // Step 1: Fetch weather data based on the user's zip code (replace 'YOUR_WEATHER_API_KEY' with your actual API key)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=a19185f10075ce7c80e43d04557895e8`)
         .then((response) => response.json())
         .then((weatherData) => {
           // Extract relevant weather information from the API response
@@ -26,35 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
             playlistName = "Cozy Winter";
           }
   
-          // Step 3: Fetch Spotify playlist based on the determined name (you need to replace 'YOUR_SPOTIFY_API_KEY' with your actual API key)
-          fetch(`https://api.spotify.com/v1/playlists/${playlistName}`, {
-            headers: {
-              Authorization: `Bearer YOUR_SPOTIFY_API_KEY`, // Replace with your Spotify API token
-            },
-          })
-            .then((response) => response.json())
-            .then((playlistData) => {
-              // Step 4: Display the Spotify playlist or take further actions based on the data
-              const playlistTracks = playlistData.tracks.items;
-              const playlistContainer = document.getElementById("playlist-container");
-  
-              // Clear any previous playlist content
-              playlistContainer.innerHTML = "";
-  
-              // Display the playlist tracks on the webpage
-              playlistTracks.forEach((track) => {
-                const trackName = track.track.name;
-                const artistName = track.track.artists[0].name;
-  
-                // Create an HTML element to display the track
-                const trackElement = document.createElement("p");
-                trackElement.textContent = `${trackName} by ${artistName}`;
-                playlistContainer.appendChild(trackElement);
-              });
-            })
-            .catch((error) => {
-              console.error("Error fetching Spotify playlist:", error);
-            });
+          // Step 3: Redirect the user to Spotify for authentication
+          const spotifyAuthURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=user-library-read`;
+          window.location.href = spotifyAuthURL;
         })
         .catch((error) => {
           console.error("Error fetching weather data:", error);
