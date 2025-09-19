@@ -177,14 +177,15 @@ export const NeuralNetworkVisualization: React.FC<NeuralNetworkVisualizationProp
       .attr("stroke", d => d.color)
       .attr("stroke-width", 2)
       .attr("class", d => d.activation > 0.5 && isActive ? "neuron-active" : "")
-      .on("mouseenter", (event, d) => {
+      .on("mouseenter", (_, d) => {
         setHoveredNeuron(d);
         
         // Highlight connected neurons
         svg.selectAll(".connection")
-          .attr("stroke-opacity", conn => 
-            (conn.source.id === d.id || conn.target.id === d.id) ? 0.8 : 0.1
-          );
+          .attr("stroke-opacity", function(conn) {
+            const c = conn as Connection;
+            return (c.source.id === d.id || c.target.id === d.id) ? 0.8 : 0.1;
+          });
       })
       .on("mouseleave", () => {
         setHoveredNeuron(null);

@@ -3,6 +3,7 @@ import { Brain, Music, Zap, Activity, Target, BarChart3 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { NeuralNetworkVisualization } from './components/NeuralNetworkVisualization'
 import { PremiumControlPanel } from './components/PremiumControlPanel'
+import { RealTimeMetricsDashboard } from './components/RealTimeMetricsDashboard'
 import { useNeuralEngine } from './hooks/useNeuralEngine'
 
 const musicGenres = [
@@ -173,10 +174,10 @@ function App() {
           />
         </motion.div>
 
-        {/* Bottom Row - Neural Network + Recommendations */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Neural Network Visualization - Takes 2/3 of space */}
-          <div className="lg:col-span-2">
+        {/* Bottom Row - Neural Network + Recommendations + Metrics */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          {/* Neural Network Visualization */}
+          <div className="xl:col-span-6">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -224,8 +225,8 @@ function App() {
             </motion.div>
           </div>
 
-          {/* AI Recommendations - Takes 1/3 of space */}
-          <div className="lg:col-span-1">
+          {/* AI Recommendations */}
+          <div className="xl:col-span-3">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -244,7 +245,7 @@ function App() {
                 >
                   <Music className="w-6 h-6 text-white" />
                 </motion.div>
-                <div>
+      <div>
                   <h2 className="text-2xl font-bold text-white">AI Recommendations</h2>
                   <p className="text-gray-400">Personalized for you</p>
                 </div>
@@ -292,7 +293,7 @@ function App() {
                           </span>
                         </div>
                       </div>
-                    </div>
+      </div>
                     
                     {/* Rating buttons */}
                     <motion.div 
@@ -311,11 +312,25 @@ function App() {
                         className="px-4 py-2 bg-green-500/20 text-green-400 rounded-full text-sm hover:bg-green-500/30 transition-colors border border-green-500/30 hover:border-green-500/50"
                       >
                         👍 Love it
-                      </button>
+        </button>
                     </motion.div>
                   </motion.div>
                 ))}
               </div>
+            </motion.div>
+          </div>
+
+          {/* Real-Time Metrics Dashboard */}
+          <div className="xl:col-span-3">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <RealTimeMetricsDashboard 
+                metrics={metrics}
+                isActive={isEngineReady}
+              />
             </motion.div>
           </div>
         </div>

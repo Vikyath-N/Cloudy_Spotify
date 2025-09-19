@@ -142,8 +142,8 @@ export const PremiumControlPanel: React.FC<PremiumControlPanelProps> = ({
                 <span className="text-sm font-medium text-gray-300">Weather Condition</span>
               </div>
               <div className="grid grid-cols-5 gap-2">
-                {weatherIcons.map((weather, index) => {
-                  const Icon = weather.icon;
+                {weatherIcons.map((option, index) => {
+                  const Icon = option.icon;
                   const isSelected = weather.condition === index;
                   return (
                     <motion.button
@@ -159,10 +159,10 @@ export const PremiumControlPanel: React.FC<PremiumControlPanelProps> = ({
                     >
                       <Icon 
                         className="w-6 h-6 mx-auto mb-2" 
-                        style={{ color: weather.color }}
+                        style={{ color: option.color }}
                       />
                       <div className="text-xs text-gray-300 font-medium">
-                        {weather.name}
+                        {option.name}
                       </div>
                     </motion.button>
                   );

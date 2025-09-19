@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:wasm && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "build:wasm": "npm run build:cpp",
     "build:cpp": "cd src/cpp && emcc -O3 -s WASM=1 -s EXPORTED_FUNCTIONS='[\"_predict\", \"_train\", \"_getActivations\", \"_initialize\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' --bind music_rl_engine.cpp neural_network.cpp experience_buffer.cpp music_environment.cpp -I./eigen -o ../../public/music_engine.js",
+    "build:production": "npm run build:wasm && npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "setup:eigen": "cd src/cpp && curl -L https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz | tar xz && mv eigen-3.4.0 eigen"
+    "setup:eigen": "cd src/cpp && curl -L https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz | tar xz && mv eigen-3.4.0 eigen",
+    "deploy": "npm run build && gh-pages -d dist",
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.13",
@@ -30,12 +33,14 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
+    "@types/node": "^24.5.2",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",
     "eslint": "^9.35.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "gh-pages": "^6.3.0",
     "globals": "^16.4.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.43.0",
