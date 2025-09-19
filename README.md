@@ -218,3 +218,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Built with ❤️ and advanced AI • Powered by C++ • Enhanced by TypeScript • Visualized with D3.js**
+
+## Deployment Note
+Deployment is triggered automatically on git push to main via GitHub Actions.
