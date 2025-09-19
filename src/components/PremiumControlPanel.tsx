@@ -11,7 +11,7 @@ import {
   Heart
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 
 interface PremiumControlPanelProps {

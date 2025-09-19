@@ -9,7 +9,7 @@ import {
   Cpu,
   BarChart3
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/Card';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
 
 interface MetricsProps {
