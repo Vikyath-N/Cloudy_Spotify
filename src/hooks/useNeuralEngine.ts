@@ -45,7 +45,7 @@ export const useNeuralEngine = () => {
 
         // Load the mock engine for development
         const script = document.createElement('script');
-        script.src = '/music_engine_mock.js';
+        script.src = `${import.meta.env.BASE_URL}music_engine_mock.js`;
         script.onload = async () => {
           if (window.MusicEngine) {
             await window.MusicEngine.initialize();

@@ -227,9 +227,9 @@ export const NeuralNetworkVisualization: React.FC<NeuralNetworkVisualizationProp
         viewBox={`0 0 ${width} ${height}`}
         className="neural-network-svg w-full h-full"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(15, 15, 35, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%)',
+          background: 'radial-gradient(ellipse at center, rgba(9, 12, 20, 0.9) 0%, rgba(3, 5, 10, 0.95) 100%)',
           borderRadius: '16px',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
+          border: '1px solid rgba(255, 255, 255, 0.08)'
         }}
       />
       
@@ -255,7 +255,7 @@ export const NeuralNetworkVisualization: React.FC<NeuralNetworkVisualizationProp
       )}
       
       {/* Enhanced Network stats overlay */}
-      <div className="absolute bottom-4 right-4 glass-dark p-4 rounded-xl text-sm border border-white/20 shadow-2xl">
+      <div className="absolute bottom-4 right-4 glass-dark p-4 rounded-xl text-sm border border-white/10 shadow-2xl">
         <div className="flex items-center space-x-2 mb-2">
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
           <span className="text-green-400 font-semibold">

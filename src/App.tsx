@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Brain, Music, Zap, Activity, Target, BarChart3 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { NeuralNetworkVisualization } from './components/NeuralNetworkVisualization'
 import { PremiumControlPanel } from './components/PremiumControlPanel'
-import { RealTimeMetricsDashboard } from './components/RealTimeMetricsDashboard'
 import { useNeuralEngine } from './hooks/useNeuralEngine'
+import { useToast } from './hooks/useToast'
 
 const musicGenres = [
   "Chill/Lofi", "Pop Hits", "Rock/Energy", "Jazz/Smooth", "Electronic/Dance"
@@ -28,6 +30,9 @@ function App() {
     { name: "Cloudy Day Indie", confidence: 76.8, genre: 1 },
     { name: "Afternoon Jazz", confidence: 85.5, genre: 3 }
   ])
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [pendingRating, setPendingRating] = useState<{ rating: number; trackName: string } | null>(null)
+  const { toasts, toast, dismiss } = useToast()
 
   // Auto-simulate activity for demo (less frequent to reduce performance violations)
   useEffect(() => {
@@ -69,6 +74,11 @@ function App() {
     console.log('Mood changed to:', mood)
   }
 
+  const handleRatingClick = (rating: number, trackName: string) => {
+    setPendingRating({ rating, trackName })
+    setDialogOpen(true)
+  }
+
   const handleTraining = async (rating: number) => {
     if (currentPrediction !== null) {
       const mockContext = {
@@ -82,286 +92,207 @@ function App() {
 
       try {
         await train(mockContext, currentPrediction, rating)
+        setDialogOpen(false)
+        setPendingRating(null)
+        toast({
+          title: "Training Complete",
+          description: `Your feedback for "${pendingRating?.trackName}" has been recorded`,
+          variant: "default"
+        })
       } catch (error) {
         console.error('Training failed:', error)
+        toast({
+          title: "Training Failed",
+          description: "Failed to record your feedback. Please try again.",
+          variant: "destructive"
+        })
       }
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-x-hidden">
-      {/* Premium Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDMpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+    <div className="min-h-screen text-white" style={{background: 'var(--bg)'}}>
       
       <div className="relative z-10">
-      {/* Premium Header */}
-      <motion.header 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-dark p-6 m-4 rounded-3xl backdrop-blur-xl"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <motion.div 
-              className="relative"
-              animate={{ 
-                scale: isEngineReady ? [1, 1.05, 1] : 1,
-                rotate: isLoading ? 360 : 0
-              }}
-              transition={{ 
-                scale: { duration: 2, repeat: Infinity },
-                rotate: { duration: 2, repeat: Infinity, ease: "linear" }
-              }}
-            >
-              <Brain className="w-10 h-10 text-spotify-green" />
-              {isEngineReady && (
-                <motion.div 
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"
-                />
-              )}
-            </motion.div>
+      {/* Minimalist Header */}
+      <header className="border-b border-slate-800/30">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-spotify-green via-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Cloudy Spotify AI
-              </h1>
-              <p className="text-sm text-gray-400">Neural Network Music Recommendation Engine</p>
+              <h1 className="text-2xl font-medium text-white">Cloudy Spotify AI</h1>
+              <p className="text-sm text-slate-400 mt-1">Neural music recommendations</p>
             </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm">
-              <Activity className="w-4 h-4 text-blue-400" />
-              <span className="text-gray-300">
-                Active Neurons: {activations.flat().filter(a => a > 0.5).length}
-              </span>
+            <div className="flex items-center space-x-6 text-sm text-slate-400">
+              <span>Neurons: {activations.flat().filter(a => a > 0.5).length}</span>
+              <span>Accuracy: {(metrics.accuracy * 100).toFixed(1)}%</span>
+              <Badge variant={isEngineReady ? 'default' : 'secondary'}>
+                {isEngineReady ? 'Ready' : 'Loading'}
+              </Badge>
             </div>
-            <div className="flex items-center space-x-2 text-sm">
-              <Target className="w-4 h-4 text-green-400" />
-              <span className="text-gray-300">
-                Accuracy: {(metrics.accuracy * 100).toFixed(1)}%
-              </span>
-            </div>
-            <motion.div 
-              animate={{ 
-                backgroundColor: isEngineReady ? 'rgba(34, 197, 94, 0.2)' : 'rgba(234, 179, 8, 0.2)',
-                borderColor: isEngineReady ? 'rgba(34, 197, 94, 0.3)' : 'rgba(234, 179, 8, 0.3)'
-              }}
-              className="px-4 py-2 rounded-full text-xs font-medium border"
-            >
-              <span className={isEngineReady ? 'text-green-400' : 'text-yellow-400'}>
-                {isEngineReady ? '🧠 AI Ready' : '⏳ Loading...'}
-              </span>
-            </motion.div>
           </div>
         </div>
-      </motion.header>
+      </header>
 
-      {/* Main Content - Premium Layout */}
-      <main className="p-6 space-y-8">
-        {/* Top Row - Control Panel */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <PremiumControlPanel 
-            onWeatherChange={handleWeatherChange}
-            onMoodChange={handleMoodChange}
-            isLoading={isLoading}
-          />
-        </motion.div>
-
-        {/* Bottom Row - Neural Network + Recommendations + Metrics */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-          {/* Neural Network Visualization */}
-          <div className="xl:col-span-6">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="glass-dark p-8 rounded-3xl backdrop-blur-xl min-h-[500px]"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-              }}
-            >
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center space-x-4">
-                  <motion.div 
-                    className="w-12 h-12 rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-600 flex items-center justify-center shadow-lg"
-                    whileHover={{ scale: 1.05, rotate: 5 }}
-                  >
-                    <Zap className="w-6 h-6 text-white" />
-                  </motion.div>
+      {/* Main Content - Clean Layout */}
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Neural Network */}
+          <div className="lg:col-span-2">
+            <Card className="border-slate-800/30 bg-slate-900/50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-white">Neural Network</h2>
-                    <p className="text-gray-400">Real-time decision visualization</p>
+                    <CardTitle className="text-lg font-medium">Neural Network</CardTitle>
+                    <CardDescription className="text-slate-400">Real-time visualization</CardDescription>
                   </div>
+                  <Button variant="outline" size="sm" onClick={() => simulateActivity()}>
+                    Simulate
+                  </Button>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Inference Time</div>
-                  <div className="text-2xl font-bold text-orange-400">
-                    {metrics.inference_time.toFixed(1)}ms
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {activations.flat().filter(a => a > 0.5).length} neurons active
-                  </div>
-                </div>
-              </div>
-              
-              <div className="relative">
+              </CardHeader>
+              <CardContent>
                 <NeuralNetworkVisualization
-                  width={800}
-                  height={400}
+                  width={600}
+                  height={300}
                   isActive={isEngineReady}
                   activations={activations}
                   layerInfo={layerInfo}
                 />
-              </div>
-            </motion.div>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* AI Recommendations */}
-          <div className="xl:col-span-3">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass-dark p-8 rounded-3xl backdrop-blur-xl min-h-[500px]"
-              style={{
-                background: 'linear-gradient(135deg, rgba(29, 185, 84, 0.1) 0%, rgba(29, 185, 84, 0.02) 100%)',
-                border: '1px solid rgba(29, 185, 84, 0.2)',
-                boxShadow: '0 25px 50px -12px rgba(29, 185, 84, 0.2)'
-              }}
-            >
-              <div className="flex items-center space-x-4 mb-8">
-                <motion.div 
-                  className="w-12 h-12 rounded-2xl bg-gradient-to-r from-spotify-green to-green-400 flex items-center justify-center shadow-lg"
-                  whileHover={{ scale: 1.05, rotate: -5 }}
-                >
-                  <Music className="w-6 h-6 text-white" />
-                </motion.div>
-      <div>
-                  <h2 className="text-2xl font-bold text-white">AI Recommendations</h2>
-                  <p className="text-gray-400">Personalized for you</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                {recommendations.map((track, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + i * 0.1 }}
-                    whileHover={{ 
-                      scale: 1.02, 
-                      y: -4,
-                      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3)"
-                    }}
-                    className="group p-6 bg-white/5 rounded-2xl hover:bg-white/10 transition-all cursor-pointer border border-white/5 hover:border-spotify-green/30 backdrop-blur-sm"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <motion.div 
-                        className="w-14 h-14 bg-gradient-to-br from-spotify-green to-green-400 rounded-2xl flex items-center justify-center shadow-lg"
-                        whileHover={{ scale: 1.1, rotate: 10 }}
-                      >
-                        <Music className="w-7 h-7 text-white" />
-                      </motion.div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-white group-hover:text-spotify-green transition-colors text-lg">
+          {/* Sidebar */}
+          <div className="space-y-8">
+            {/* Recommendations */}
+            <Card className="border-slate-800/30 bg-slate-900/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-medium">Recommendations</CardTitle>
+                <CardDescription className="text-slate-400">AI curated for you</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recommendations.map((track, i) => (
+                    <div key={i} className="group p-4 rounded-lg border border-slate-800/30 hover:border-slate-600/50 transition-colors">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-medium text-white group-hover:text-green-400 transition-colors">
                           {track.name}
-                        </p>
-                        <p className="text-sm text-gray-400 mb-3">
-                          Genre: {musicGenres[track.genre]}
-                        </p>
-                        <div className="flex items-center space-x-3">
-                          <div className="flex-1 bg-white/10 rounded-full h-2 overflow-hidden">
-                            <motion.div 
-                              className="bg-gradient-to-r from-spotify-green to-green-400 h-2 rounded-full"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${track.confidence}%` }}
-                              transition={{ duration: 1.5, delay: 0.5 + i * 0.2 }}
-                            />
-                          </div>
-                          <span className="text-sm text-spotify-green font-bold">
-                            {track.confidence.toFixed(1)}%
-                          </span>
-                        </div>
+                        </h3>
+                        <span className="text-sm text-green-400 font-medium">
+                          {track.confidence.toFixed(0)}%
+                        </span>
                       </div>
-      </div>
-                    
-                    {/* Rating buttons */}
-                    <motion.div 
-                      className="flex items-center justify-center space-x-3 mt-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      initial={{ y: 10 }}
-                      whileHover={{ y: 0 }}
-                    >
-                      <button 
-                        onClick={() => handleTraining(-1)}
-                        className="px-4 py-2 bg-red-500/20 text-red-400 rounded-full text-sm hover:bg-red-500/30 transition-colors border border-red-500/30 hover:border-red-500/50"
-                      >
-                        👎 Not for me
-                      </button>
-                      <button 
-                        onClick={() => handleTraining(1)}
-                        className="px-4 py-2 bg-green-500/20 text-green-400 rounded-full text-sm hover:bg-green-500/30 transition-colors border border-green-500/30 hover:border-green-500/50"
-                      >
-                        👍 Love it
-        </button>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                      <p className="text-sm text-slate-400 mb-3">
+                        {musicGenres[track.genre]}
+                      </p>
+                      <div className="flex space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleRatingClick(-1, track.name)}
+                          className="text-xs"
+                        >
+                          👎
+                        </Button>
+                        <Button 
+                          variant="default" 
+                          size="sm" 
+                          onClick={() => handleRatingClick(1, track.name)}
+                          className="text-xs"
+                        >
+                          👍
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Control Panel */}
+            <Card className="border-slate-800/30 bg-slate-900/50">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-medium">Context</CardTitle>
+                <CardDescription className="text-slate-400">Adjust your preferences</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PremiumControlPanel 
+                  onWeatherChange={handleWeatherChange}
+                  onMoodChange={handleMoodChange}
+                  isLoading={isLoading}
+                />
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Real-Time Metrics Dashboard */}
-          <div className="xl:col-span-3">
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <RealTimeMetricsDashboard 
-                metrics={metrics}
-                isActive={isEngineReady}
-              />
-            </motion.div>
-          </div>
         </div>
       </main>
 
-      {/* Premium Status Bar */}
-      <motion.footer 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-dark p-4 m-4 rounded-3xl backdrop-blur-xl"
-      >
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <Brain className="w-4 h-4 text-blue-400" />
-              <span className="text-gray-300">Neural Engine v2.0.0</span>
+      {/* Minimalist Footer */}
+      <footer className="border-t border-slate-800/30">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between text-sm text-slate-400">
+            <div className="flex items-center space-x-6">
+              <span>Engine v2.0.0</span>
+              <span>Step: {metrics.training_step}</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-yellow-400" />
-              <span className="text-gray-300">Training Step: {metrics.training_step}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <BarChart3 className="w-4 h-4 text-green-400" />
-              <span className="text-gray-300">Epsilon: {metrics.epsilon.toFixed(3)}</span>
-            </div>
-          </div>
-          <div className="text-xs text-gray-500">
-            Built with ❤️ using C++ • WebAssembly • React • TypeScript • D3.js
+            <div>Built with React & TypeScript</div>
           </div>
         </div>
-      </motion.footer>
+      </footer>
+
+      {/* Rating Confirmation Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Your Rating</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to {pendingRating?.rating === 1 ? '👍 Love' : '👎 dislike'} "{pendingRating?.trackName}"? 
+              This will help improve your future recommendations.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={() => pendingRating && handleTraining(pendingRating.rating)}
+              variant={pendingRating?.rating === 1 ? "default" : "outline"}
+            >
+              {pendingRating?.rating === 1 ? '👍 Love it' : '👎 Not for me'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Simple Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 space-y-2">
+        {toasts.map((toastItem) => (
+          <div
+            key={toastItem.id}
+            className={`p-3 rounded-md border max-w-sm text-sm ${
+              toastItem.variant === 'destructive'
+                ? 'bg-red-950 border-red-700 text-red-200'
+                : 'bg-red-900 border-red-600 text-red-100'
+            }`}
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="font-medium">{toastItem.title}</p>
+                {toastItem.description && (
+                  <p className="text-xs opacity-80 mt-1">{toastItem.description}</p>
+                )}
+              </div>
+              <button
+                onClick={() => dismiss(toastItem.id)}
+                className="ml-2 opacity-70 hover:opacity-100"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
       </div>
     </div>
   )

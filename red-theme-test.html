@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Theme Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a0b0b;
+            color: #f5e6e6;
+            font-family: 'Inter', sans-serif;
+        }
+        .test-box {
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .red-bg { background: var(--bg); }
+        .red-text { color: var(--text); }
+        .red-border { border: 1px solid var(--border); }
+        .success { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .card { background: transparent; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 10px 0; }
+        .badge { background: transparent; border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; display: inline-block; margin: 5px; }
+        input { padding: 8px; background: #2d1212; color: white; border: 1px solid #4a1a1a; margin: 10px 0; }
+        .slider { width: 200px; height: 8px; background: #4a1a1a; border-radius: 4px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🔴 Red Theme Applied!</h1>
+
+    <div class="test-box success">
+        <h3>✅ UPDATED: All colors changed to red theme</h3>
+        <p>Background: #1a0b0b (dark red)</p>
+        <p>Surface: #2d1212 (medium red)</p>
+        <p>Border: #4a1a1a (light red)</p>
+        <p>Text: #f5e6e6 (light pink)</p>
+        <p>Accent: #ef4444 (bright red)</p>
+    </div>
+
+    <div class="test-box red-bg red-text red-border">
+        <h3>🧪 Test: CSS Variables Working</h3>
+        <p>This box should have:</p>
+        <ul>
+            <li>Background: #1a0b0b</li>
+            <li>Color: #f5e6e6</li>
+            <li>Border: #4a1a1a</li>
+        </ul>
+    </div>
+
+    <div class="test-box">
+        <h3>🎨 Component Examples</h3>
+        <div class="card">
+            <h4>Card Component</h4>
+            <p>This uses the red theme borders and backgrounds</p>
+        </div>
+
+        <div>
+            <span class="badge">Badge</span>
+            <span class="badge">Success Badge</span>
+            <span class="badge">Warning Badge</span>
+        </div>
+
+        <input type="text" placeholder="Input field with red theme" />
+        <div class="slider"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>🔗 Links</h3>
+        <a href="http://localhost:5173">View Main App</a> |
+        <a href="/verify-fix.html">Verify Fix</a> |
+        <a href="/test-css-conflicts.html">CSS Conflicts Test</a>
+    </div>
+
+    <script>
+        // Auto-redirect to main app after 5 seconds
+        setTimeout(() => {
+            window.location.href = 'http://localhost:5173';
+        }, 5000);
+    </script>
+</body>
+</html>

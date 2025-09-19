@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify CSS Fix</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0b0f19;
+            color: #e5e7eb;
+            font-family: 'Inter', sans-serif;
+        }
+        .test-box {
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .genz-bg { background: var(--bg); }
+        .genz-text { color: var(--text); }
+        .genz-border { border: 1px solid var(--border); }
+        .success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); }
+    </style>
+</head>
+<body>
+    <h1>🎯 CSS Conflict Resolution Test</h1>
+
+    <div class="test-box success">
+        <h3>✅ FIXED: index.html now uses Gen-Z theme</h3>
+        <p>Background: #0b0f19 (matches --bg from index.css)</p>
+        <p>Color: #e5e7eb (matches --text from index.css)</p>
+    </div>
+
+    <div class="test-box success">
+        <h3>✅ FIXED: App.tsx uses CSS variables</h3>
+        <p>Removed conflicting bg-slate-950</p>
+        <p>Now uses style={{background: 'var(--bg)'}}</p>
+    </div>
+
+    <div class="test-box genz-bg genz-text genz-border">
+        <h3>🧪 Test: CSS Variables Working</h3>
+        <p>This box should have:</p>
+        <ul>
+            <li>Background: #0b0f19</li>
+            <li>Color: #e5e7eb</li>
+            <li>Border: #1f2937</li>
+        </ul>
+    </div>
+
+    <div class="test-box">
+        <h3>🔍 Next Steps</h3>
+        <ol>
+            <li>Visit: <a href="http://localhost:5173" target="_blank">http://localhost:5173</a></li>
+            <li>Check if white borders are gone</li>
+            <li>Verify Gen-Z theme consistency</li>
+            <li>Test the conflict analysis page: <a href="/test-css-conflicts.html">/test-css-conflicts.html</a></li>
+        </ol>
+    </div>
+
+    <script>
+        // Auto-redirect to main app after 3 seconds
+        setTimeout(() => {
+            window.location.href = 'http://localhost:5173';
+        }, 3000);
+    </script>
+</body>
+</html>

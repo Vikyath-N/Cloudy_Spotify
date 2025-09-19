@@ -6,12 +6,21 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif']
+      },
       colors: {
         spotify: {
           green: '#1DB954',
           black: '#191414',
           dark: '#121212',
           gray: '#535353',
+        },
+        brand: {
+          primary: '#1DB954',
+          primaryDark: '#169c44',
+          accent: '#8b5cf6',
+          glow: '#22d3ee',
         },
         neural: {
           input: '#4CAF50',
@@ -25,6 +34,7 @@ export default {
         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'neuron-fire': 'neuron-fire 0.5s ease-in-out',
         'data-flow': 'data-flow 1s ease-in-out infinite',
+        'float': 'float 8s ease-in-out infinite',
       },
       keyframes: {
         'neuron-fire': {
@@ -36,6 +46,11 @@ export default {
           '0%': { transform: 'translateX(-100%)', opacity: '0' },
           '50%': { opacity: '1' },
           '100%': { transform: 'translateX(100%)', opacity: '0' },
+        },
+        'float': {
+          '0%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
+          '100%': { transform: 'translateY(0px)' }
         }
       }
     },

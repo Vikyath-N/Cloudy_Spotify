@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Conflict Test</title>
+
+    <!-- Test 1: Check if critical CSS in index.html is overriding -->
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #0f172a; /* From index.html */
+            color: white;
+            font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+        }
+        #root {
+            min-height: 100vh;
+        }
+    </style>
+
+    <!-- Test 2: Load index.css -->
+    <link rel="stylesheet" href="/src/index.css">
+
+    <style>
+        /* Test 3: Check Tailwind class override */
+        .test-bg-slate-950 {
+            background-color: #020617 !important; /* Tailwind slate-950 */
+        }
+
+        /* Test 4: Check CSS variable override */
+        .test-css-var {
+            background: var(--bg) !important; /* Should be #0b0f19 */
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div style="padding: 20px;">
+            <h1>CSS Conflict Analysis</h1>
+
+            <div style="margin: 20px 0; padding: 20px; border: 2px solid red;">
+                <h3>Test 1: index.html critical CSS</h3>
+                <p>Background should be #0f172a (light blue-gray)</p>
+                <p>Color should be white</p>
+            </div>
+
+            <div style="margin: 20px 0; padding: 20px;" class="test-css-var">
+                <h3>Test 2: CSS Variable --bg</h3>
+                <p>Background should be #0b0f19 (darker blue-gray from index.css)</p>
+                <p>If you see this background, CSS variables are working</p>
+            </div>
+
+            <div style="margin: 20px 0; padding: 20px;" class="test-bg-slate-950">
+                <h3>Test 3: Tailwind bg-slate-950</h3>
+                <p>Background should be #020617 (very dark blue-gray)</p>
+                <p>If you see this background, Tailwind is working</p>
+            </div>
+
+            <div style="margin: 20px 0; padding: 20px; background: var(--surface); border: 1px solid var(--border);">
+                <h3>Test 4: CSS Variables from index.css</h3>
+                <p>--surface should be #0e1322</p>
+                <p>--border should be #1f2937</p>
+                <p>Color should be var(--text) = #e5e7eb</p>
+            </div>
+
+            <div style="margin: 20px 0; padding: 20px;">
+                <h3>Computed Styles Check</h3>
+                <button onclick="checkStyles()">Check Actual Computed Styles</button>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkStyles() {
+            const body = document.body;
+            const root = document.getElementById('root');
+
+            const results = document.getElementById('results');
+            results.innerHTML = `
+                <h4>Computed Styles:</h4>
+                <p><strong>body background:</strong> ${getComputedStyle(body).backgroundColor}</p>
+                <p><strong>body color:</strong> ${getComputedStyle(body).color}</p>
+                <p><strong>#root background:</strong> ${getComputedStyle(root).backgroundColor}</p>
+                <p><strong>--bg variable:</strong> ${getComputedStyle(document.documentElement).getPropertyValue('--bg')}</p>
+                <p><strong>--surface variable:</strong> ${getComputedStyle(document.documentElement).getPropertyValue('--surface')}</p>
+                <p><strong>--border variable:</strong> ${getComputedStyle(document.documentElement).getPropertyValue('--border')}</p>
+                <p><strong>--text variable:</strong> ${getComputedStyle(document.documentElement).getPropertyValue('--text')}</p>
+            `;
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', checkStyles);
+    </script>
+</body>
+</html>
