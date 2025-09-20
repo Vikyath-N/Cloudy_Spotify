@@ -15,6 +15,9 @@
   --neuron-inactive: #374151;
   --connection-active: #3b82f6;
   --connection-inactive: #6b7280;
+  
+  /* Background variable for the app */
+  --bg: #1a0b0b;
 
   /* shadcn/ui theme variables - using neutral theme with red accents */
   --radius: 0.5rem;
