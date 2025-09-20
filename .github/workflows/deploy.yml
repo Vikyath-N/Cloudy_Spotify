@@ -66,21 +66,3 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # Performance monitoring job
-  lighthouse:
-    runs-on: ubuntu-latest
-    needs: deploy
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - name: 📥 Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: 🔍 Run Lighthouse CI
-      uses: treosh/lighthouse-ci-action@v10
-      with:
-        urls: |
-          https://${{ github.repository_owner }}.github.io/Cloudy_Spotify
-        configPath: './lighthouse.config.js'
-        uploadArtifacts: true
-        temporaryPublicStorage: true
