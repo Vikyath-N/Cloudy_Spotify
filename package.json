@@ -11,9 +11,7 @@
     "build:production": "npm run build:wasm && npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "setup:eigen": "cd src/cpp && curl -L https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz | tar xz && mv eigen-3.4.0 eigen",
-    "deploy": "npm run build && gh-pages -d dist",
-    "predeploy": "npm run build"
+    "setup:eigen": "cd src/cpp && curl -L https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz | tar xz && mv eigen-3.4.0 eigen"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -48,7 +46,6 @@
     "eslint": "^9.35.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "gh-pages": "^6.3.0",
     "globals": "^16.4.0",
     "tailwind-merge": "^3.3.1",
     "terser": "^5.44.0",
